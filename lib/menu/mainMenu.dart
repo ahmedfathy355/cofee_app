@@ -76,8 +76,11 @@ class _openMenuState extends State<openMenu> {
                       textBaseline: TextBaseline.alphabetic,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        //_itemCount!=0? new  IconButton(icon: new Icon(Icons.remove),onPressed: ()=>setState(()=>_itemCount--),): Container(),
-                        Text(_itemCount.toString()),
+                        _itemCount!=0? new  IconButton(icon: new Icon(Icons.remove),onPressed: ()=>setState(()=>_itemCount--),): Container(),
+                        Container(
+                               child: Text(_itemCount.toString()),
+                        ),
+
                         IconButton(icon: new Icon(Icons.add),onPressed: ()=>setState(()=>_itemCount++))
                       ],
                     ),
