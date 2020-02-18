@@ -62,8 +62,8 @@ class _TablesBookingState extends State<TablesBooking> {
                         ),
                         onTap: (){
                           setState(() {
-                            vars_t = lst[index];
-                          }
+                              vars_t = lst[index];
+                            }
                           );
                           _handleSelectSeat(lst[index]);
                           _showModalSheet();
@@ -94,7 +94,7 @@ class _TablesBookingState extends State<TablesBooking> {
    showModalBottomSheet(context: context, builder: (builder) {
      return Container(
        child: openMenu(),
-       padding: EdgeInsets.all(40.0),
+       //padding: EdgeInsets.only(top: 40),
      );
    },
       isScrollControlled: true);
