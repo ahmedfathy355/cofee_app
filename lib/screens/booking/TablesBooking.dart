@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/mainMenu.dart';
+import 'package:gamestop_app/modle/table_row.dart';
 
 
 class TablesBooking extends StatefulWidget {
@@ -14,7 +15,8 @@ class _TablesBookingState extends State<TablesBooking> {
  var lst = ["A","B","C","D"];
  String vars_t = "";
 
- HashMap<String, bool> selectedTables = HashMap();
+ List<Table_Row> selectedTables = [] ;
+ var _bookstatuscolor = [Colors.green, Colors. grey, Colors. red] ;
 
   @override
   void initState() {
@@ -49,12 +51,13 @@ class _TablesBookingState extends State<TablesBooking> {
                       child: GridView.builder(
                     itemCount: lst.length,
                     scrollDirection: Axis.vertical,
-                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, crossAxisSpacing: 20, mainAxisSpacing: 40),
                     itemBuilder: (BuildContext _context , int index){
                       return  GestureDetector(
                         child: Card(
                           elevation: 5,
-                          color: Colors.green,
+                          color: _bookstatuscolor[0],
                           child:  Container(alignment: Alignment.centerLeft,
                                 margin:  EdgeInsets.only(top: 10.0, bottom: 10.0,left: 10.0),
                                 child: Text(lst[index])
@@ -63,6 +66,7 @@ class _TablesBookingState extends State<TablesBooking> {
                         onTap: (){
                           setState(() {
                               vars_t = lst[index];
+                              selectedTables.add(lst[index], 0);
                             }
                           );
                           _handleSelectSeat(lst[index]);
@@ -75,6 +79,56 @@ class _TablesBookingState extends State<TablesBooking> {
                   ),
 
                   new Text(vars_t),
+
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                                color: Colors.redAccent),
+                          ),
+                          Text('Out of Service')
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                                color: Colors.grey),
+                          ),
+                          Text('Booked')
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                                color: Colors.greenAccent),
+                          ),
+                          Text('Avaliable')
+                        ],
+                      ),
+                    ],
+                  ),
+
 
                 ],
               ),
@@ -105,11 +159,11 @@ class _TablesBookingState extends State<TablesBooking> {
 
  void _handleSelectSeat(String table) {
    setState(() {
-//     if (!selectedSeats.containsKey(table)) {
-//       selectedSeats[table] = true;
-//     } else {
-//       selectedSeats[table] = !selectedSeats[table];
-//     }
+     if (!selectedTables.containsKey(table)) {
+       selectedTables[table] = true;
+     } else {
+       selectedTables[table] = !selectedTables[table];
+     }
    });
  }
 
