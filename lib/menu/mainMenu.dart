@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/fab_bottom_app_bar.dart';
+import 'package:gamestop_app/utility/FONT_CONST.dart';
 import 'package:gamestop_app/widgets/loader.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -10,6 +11,10 @@ import 'package:http/http.dart' as http;
 
 
 class openMenu extends StatefulWidget {
+
+  var tableID;
+  openMenu(@required this.tableID);
+
   @override
   _openMenuState createState() => _openMenuState();
 }
@@ -23,9 +28,8 @@ class _openMenuState extends State<openMenu> {
 
   var itm_cat = 1;
   Future<List<Items>> _getItems() async {
-    //var sql = "Select * From items_test Where Item_Cat = '$itm_cat' ";
-    var get_response = await http.get('http://192.168.1.4:5000/api/mssql/databases/export/tables/items_test');
-    //var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
+    var sql = "Select * From items_test Where Item_Cat = '$itm_cat' ";
+    var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
     items = List<Items>();
     print(get_response.statusCode);
     if(get_response.statusCode == 200){
@@ -39,20 +43,15 @@ class _openMenuState extends State<openMenu> {
 
   }
 
-  Future<List<Items>> _insertItems() async {
-    var sql = "Select * From items_test ";
-    var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
-    items = List<Items>();
-    if(get_response.statusCode == 200){
-      var jsondata = json.decode(get_response.body);
-      for(var itm in jsondata){
-        items.add(Items.fromJson(itm));
-      }
-    }
-    print(items.length.toString());
-    return items;
 
+  Future _insertItems(String table_id , String ItemID , double Qty) async {
+    var sql = "insert Into bill_items_test (tableID,ItemID, Qty) Values ('$table_id' , '$ItemID' , $Qty) ";
+    await http.get('http://ubuntu-eg.com/snap_api/insert.php?sql=$sql');
+    print('inserted');
+    selecteditems.clear();
   }
+
+
 
   var listPoduct  = StreamController<List<Items>>();
 
@@ -78,6 +77,9 @@ class _openMenuState extends State<openMenu> {
     listPoduct.sink.add(items);
     super.initState();
   }
+
+  int value = 1;
+
 
   @override
   Widget build(BuildContext context) {
@@ -137,30 +139,95 @@ class _openMenuState extends State<openMenu> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
 
-                              items[index].qty!=0? IconButton(alignment: Alignment.bottomCenter, icon: new Icon(Icons.remove) , color: Colors.purple,iconSize: 30,onPressed: ()=>setState(() => _update(index, -1)),): Container(),
+//                              items[index].qty!=0? IconButton(alignment: Alignment.bottomCenter, icon: new Icon(Icons.remove) , color: Colors.purple,iconSize: 30,onPressed: ()=>setState(() => _update(index, -1)),): Container(),
+//
+//                              SizedBox(width: 10,),
+//
+//                              Container(
+//                                width: 30,
+//                                height: 30,
+//                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+//                                                          border: Border.all(color: Colors.purple , width: 1 ),
+//                                ),
+//                                     child: Center(
+//                                       child: Text(
+//                                         items[index].qty.toString()
+//                                         ,style: TextStyle(color: Colors.purple,fontSize: 22,fontWeight: FontWeight.bold),),
+//                                     ),
+//                              ),
+//
+//                              SizedBox(width: 10,),
+//
+//                              IconButton(icon: new Icon(Icons.add),color: Colors.purple,iconSize: 30,onPressed: ()=>setState((){
+//                                //snapshot.data[index].qty++;
+//                                _update(index, 1);
+//                              }
+//                              )),
 
-                              SizedBox(width: 10,),
 
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                                                          border: Border.all(color: Colors.purple , width: 1 ),
+
+
+
+
+
+                              /// Decrease of value item
+                              items[index].qty!=0? InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _update(index, -1);
+                                  });
+                                },
+                                child: Container(
+                                  height: 30.0,
+                                  width: 50.0,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          right: BorderSide(
+                                              color: Colors.black12
+                                                  .withOpacity(0.5)))),
+                                  child: Center(child: Text("-",style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
                                 ),
-                                     child: Center(
-                                       child: Text(
-                                         items[index].qty.toString()
-                                         ,style: TextStyle(color: Colors.purple,fontSize: 22,fontWeight: FontWeight.bold),),
-                                     ),
+                              ): Container(),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 28.0),
+                                child: Text(items[index].qty.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_28,),
                               ),
 
-                              SizedBox(width: 10,),
+                              /// Increasing value of item
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _update(index, 1);
 
-                              IconButton(icon: new Icon(Icons.add),color: Colors.purple,iconSize: 30,onPressed: ()=>setState((){
-                                //snapshot.data[index].qty++;
-                                _update(index, 1);
-                              }
-                              )),
+                                  });
+                                },
+                                child: Container(
+                                  height: 30.0,
+                                  width: 60.0,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          left: BorderSide(
+                                              color: Colors.black12
+                                                  .withOpacity(0.5)))),
+                                  child: Center(child: Text("+",style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
+                                ),
+                              ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                             ],
@@ -180,7 +247,10 @@ class _openMenuState extends State<openMenu> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _insertItems();
+          for(int i = 0 ; i < selecteditems.length ;i++ ){
+            _insertItems(widget.tableID.toString() , selecteditems[i].ItemID , double.tryParse( selecteditems[i].qty.toString()));
+          }
+          Navigator.of(context).pop();
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

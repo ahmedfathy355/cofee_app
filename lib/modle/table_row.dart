@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gamestop_app/menu/mainMenu.dart';
 
-class Table_Row {
-  //A, B, C, ...
-  //String rowId;
- // int count;
-  //List<int> offs = [];
-  //List<int> booked = [];
+class Table_Slot {
+
   String tableid;
-  int booked;
+  bool booked;
+  List<Items> TableItems;
 
-  Table_Row({
+  Table_Slot({
     @required this.tableid,
-   // @required this.count,
-    //@required this.offs,
     @required this.booked,
   });
 }
