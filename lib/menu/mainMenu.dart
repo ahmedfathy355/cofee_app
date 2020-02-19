@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/fab_bottom_app_bar.dart';
+import 'package:gamestop_app/widgets/loader.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -20,11 +21,13 @@ class _openMenuState extends State<openMenu> {
   List<Items> selecteditems = [];
   List<int> _itemCount = [];
 
-
+  var itm_cat = 1;
   Future<List<Items>> _getItems() async {
-    var sql = "Select * From items_test";
-    var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
+    //var sql = "Select * From items_test Where Item_Cat = '$itm_cat' ";
+    var get_response = await http.get('http://192.168.1.4:5000/api/mssql/databases/export/tables/items_test');
+    //var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
     items = List<Items>();
+    print(get_response.statusCode);
     if(get_response.statusCode == 200){
       var jsondata = json.decode(get_response.body);
       for(var itm in jsondata){
@@ -37,7 +40,7 @@ class _openMenuState extends State<openMenu> {
   }
 
   Future<List<Items>> _insertItems() async {
-    var sql = "Select * From items_test";
+    var sql = "Select * From items_test ";
     var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
     items = List<Items>();
     if(get_response.statusCode == 200){
@@ -55,7 +58,9 @@ class _openMenuState extends State<openMenu> {
 
   void _selectedTab(int index) {
     setState(() {
-      _lastSelected = 'TAB: $index';
+      itm_cat= index+1;
+      _future = _getItems();
+      //_getItems();
     });
   }
 
@@ -108,7 +113,8 @@ class _openMenuState extends State<openMenu> {
                   {
                     return Container(
                       child: Center(
-                        child: Text('Loading ....'),
+                        //child: Text('Loading ....'),
+                        child: LoaderTwo(),
                       ),
                     );
                   }else{
