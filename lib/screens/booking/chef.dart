@@ -4,22 +4,22 @@ import 'package:gamestop_app/utility/FONT_CONST.dart';
 
 
 
-class OrderScreen extends StatelessWidget {
+class ChefScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _OrderScreenState();
+    return _ChefScreenState();
   }
 }
 
-class _OrderScreenState extends StatelessWidget {
+class _ChefScreenState extends StatelessWidget {
 
-  var _totalAmount;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text('Cart', style: TextStyle(color: Colors.white)),
+        title: Text('المطبخ', style: TextStyle(color: Colors.white)),
         backgroundColor: COLOR_CONST.Bar,
         centerTitle: false,
       ),
@@ -30,45 +30,17 @@ class _OrderScreenState extends StatelessWidget {
             leading: CircleAvatar(
               child: Image.asset('assets/images/coffee.png'),
             ),
-            title: Text('قهوة مظبوط  $index',style: FONT_CONST.MEDIUM_BLUE_16,),
+            title: Text('عصير ليمون  $index',style: FONT_CONST.MEDIUM_BLUE_16,),
+            trailing: Container(
+              color: Colors.red,
+              height: 30,
+              width: 50,
+              child: Text('2' , style: TextStyle(color: Colors.white,fontSize: 18 , fontWeight: FontWeight.bold),),
+            ),
           );
         },
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ListTile(
-                title: Text(
-                  "إجمالى الشيك:",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: _total(),
-              ),
-            ),
-            Expanded(
-              child: MaterialButton(
-                onPressed: () {
-                  _customizeDialog(context);
-                  // print("Clicked");
 
-                  // this.cartService.placeOrder()
-                },
-                child: Text(
-                  "محاسبة واغلاق",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
-                      wordSpacing: 2.0),
-                ),
-                color: COLOR_CONST.Lime,
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 
@@ -96,7 +68,7 @@ class _OrderScreenState extends StatelessWidget {
     for (var i = 0; i < 20; i++) {
       totalPrice = 2000;
     }
-    this._totalAmount = totalPrice;
+
     return Text(
       "\جنية $totalPrice",
       style: TextStyle(color: Colors.teal.shade600),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamestop_app/screens/Home.dart';
 
 import 'package:gamestop_app/screens/ReservedTables.dart';
 import 'package:gamestop_app/screens/booking/TablesBooking.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-      body: TablesBooking(),
+      body: Home_App_Type(),
     ),
     );
   }

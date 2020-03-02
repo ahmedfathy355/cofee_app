@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/fab_bottom_app_bar.dart';
+import 'package:gamestop_app/utility/COLOR_CONST.dart';
 import 'package:gamestop_app/utility/FONT_CONST.dart';
 import 'package:gamestop_app/widgets/loader.dart';
 import 'dart:async';
@@ -63,16 +64,11 @@ class _openMenuState extends State<openMenu> {
     });
   }
 
-
+  TextEditingController _controller = new TextEditingController();
   Future _future;
+
   @override
   void initState() {
-//    _getItems().then((value) {
-//      setState(() {
-//        items.addAll(value);
-//      });
-//    });
-
     _future = _getItems();
     listPoduct.sink.add(items);
     super.initState();
@@ -92,17 +88,29 @@ class _openMenuState extends State<openMenu> {
             //Search
             Padding(
               padding: EdgeInsets.only(top: 40,left: 30,right: 30),
-              child: TextField(
-                onChanged: (value){
-                   filteritems(value);
-                },
-                //controller: editingControll,
-                decoration: InputDecoration(
-                  labelText: 'بحث',
-                  hintText: '',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                ),
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: <Widget>[
+                   TextField(
+                      onChanged: (value){
+                        filteritems(value);
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'بحث',
+                        hintText: '',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      controller: _controller,
+                    ),
+
+                  FlatButton(
+                      onPressed: () {
+                        _controller.clear();
+                        _getItems();
+                      },
+                      child: new Icon(Icons.highlight_off,color: Colors.grey[500],),)
+                ],
               ),
             ),
 
@@ -185,12 +193,13 @@ class _openMenuState extends State<openMenu> {
                                           right: BorderSide(
                                               color: Colors.black12
                                                   .withOpacity(0.5)))),
-                                  child: Center(child: Text("-",style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
+                                  child: Center(child: Text("-" ,style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
                                 ),
                               ): Container(),
+
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 28.0),
+                                    horizontal: 25.0),
                                 child: Text(items[index].qty.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_28,),
                               ),
 
@@ -209,8 +218,10 @@ class _openMenuState extends State<openMenu> {
                                       border: Border(
                                           left: BorderSide(
                                               color: Colors.black12
-                                                  .withOpacity(0.5)))),
-                                  child: Center(child: Text("+",style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
+                                                  .withOpacity(0.4)))),
+                                  child: Center(child: Text("+",style: TextStyle(fontFamily: 'Oswald',
+                                    fontWeight: FontWeight.w400,
+                                      color: COLOR_CONST.GREEN2,fontSize: 28 ),)),
                                 ),
                               ),
 

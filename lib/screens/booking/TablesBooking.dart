@@ -73,18 +73,18 @@ class _TablesBookingState extends State<TablesBooking> {
 
                   // Bar
                   Padding(
-                    padding: const EdgeInsets.only(right: 5,left: 5,top: 20,bottom: 5),
+                    padding: const EdgeInsets.only(right: 1,left: 1,top: 25,bottom: 5),
                     child: Container(
-                      height: 50,
+                      height: 60,
                       child: Card(
                         elevation: 2,
-                        color: COLOR_CONST.FACEBOOK_BTN,
-                        child: Center(child: Image.asset('assets/images/bar3.png', color: COLOR_CONST.Lime, ),),
+                        color: COLOR_CONST.Bar,
+                        child: Center(child: Image.asset('assets/images/bar3.png', color: Colors.white, ),),
                       ),
                     ),
                   ),
 
-
+                  // الوان حالة الترابيزات
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -97,7 +97,7 @@ class _TablesBookingState extends State<TablesBooking> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
-                                color: Colors.grey),
+                                color: COLOR_CONST.GRAY1_50),
                             child: Icon(Icons.check_circle_outline,color: Colors.blue[900].withOpacity(0.8),),
                           ),
                           Text('متاحة')
@@ -112,7 +112,7 @@ class _TablesBookingState extends State<TablesBooking> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
-                                color: Colors.redAccent),
+                                color: COLOR_CONST.Pink),
                             child: Icon(Icons.people_outline,color: Colors.white.withOpacity(0.8),),
                           ),
                           Text('مشغوله')
@@ -136,6 +136,7 @@ class _TablesBookingState extends State<TablesBooking> {
                     ],
                   ),
 
+                  // Tables
                   _buildSlotGrid(),
 
                 ],
@@ -156,16 +157,15 @@ class _TablesBookingState extends State<TablesBooking> {
      padding: const EdgeInsets.only(left: 10,right: 10),
      child: ConstrainedBox(
        constraints: BoxConstraints(
-
        ),
        child: GridView.count(
          shrinkWrap: true,
-         //physics: new AlwaysScrollableScrollPhysics(),
+         physics: new AlwaysScrollableScrollPhysics(),
          crossAxisCount: 3,
          scrollDirection: Axis.vertical,
-         childAspectRatio: 2,
+         childAspectRatio: 3/2,
          crossAxisSpacing: 40,
-         mainAxisSpacing: 30,
+         mainAxisSpacing: 30/2,
          children: _generatedGrid(),
 
        ),
@@ -197,16 +197,6 @@ class _TablesBookingState extends State<TablesBooking> {
        var itemAvailable = GestureDetector(
          onTap: () {
            if (!_isbooked) {
-             //_handleSelectTable(Table_Slot);
-//             setState(() {
-//               itemBgColor = COLOR_CONST.Pink;
-//               itemfontColor = Colors.white;
-//               if (!selectedTables.containsKey(Table_Slot.tableid)) {
-//                 selectedTables["Table 10"] = true;
-//               } else {
-//                 selectedTables[Table_Slot.tableid] = !selectedTables[Table_Slot.tableid];
-//               }
-//             });
 
              _showModalSheet(Table_Slot.tableid);
              //Navigator.push(context, MaterialPageRoute( builder: (context) =>  ));

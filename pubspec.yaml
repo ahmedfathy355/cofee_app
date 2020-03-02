@@ -24,6 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: ^0.12.0+1
+  font_awesome_flutter: ^8.5.0
 
 
 dev_dependencies:
@@ -35,6 +36,13 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/coffeelogo.png"
+  image_path_ios: "assets/images/coffeelogo.png"
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -49,6 +57,7 @@ flutter:
     - assets/images/bar3.png
     - assets/images/chair.png
     - assets/images/table.png
+    - assets/images/coffeelogo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
