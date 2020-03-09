@@ -2,10 +2,13 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/mainMenu.dart';
-import 'package:gamestop_app/modle/table_row.dart';
+import 'package:gamestop_app/modle/Tables.dart';
 import 'package:gamestop_app/screens/booking/Order.dart';
 import 'package:gamestop_app/utility/COLOR_CONST.dart';
-
+import 'package:gamestop_app/utility/utils.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class TablesBooking extends StatefulWidget {
 
@@ -18,7 +21,7 @@ class _TablesBookingState extends State<TablesBooking> {
 
 
   String table_id = "";
-  List<Table_Slot> _Table_Slots = [] ;
+  //List<Table_Slot> _Table_Slots = [] ;
   bool isbooked ;
 
 //  TablesBooking(
@@ -26,34 +29,53 @@ class _TablesBookingState extends State<TablesBooking> {
 
  HashMap<String, bool> selectedTables = HashMap();
  int maxColumn;
- List<Table_Slot> Table_Slots_DB = [];
+ //List<Table_Slot> Table_Slots_DB = [];
+List<Tables> table ;
 
- _getTables(){
-   Table_Slots_DB = List<Table_Slot>();
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 1" , booked: true));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 2" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 3" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 4" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 5" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 6" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 7" , booked: true));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 8" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 9" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 10" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 11" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 12" , booked: false));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 13" , booked: true));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 14" , booked: true));
-   Table_Slots_DB.add(Table_Slot(tableid: "Table 15" , booked: true));
+//  _getTables_xx(){
+//    Table_Slots_DB = List<Table_Slot>();
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 1" , booked: true));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 2" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 3" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 4" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 5" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 6" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 7" , booked: true));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 8" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 9" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 10" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 11" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 12" , booked: false));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 13" , booked: true));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 14" , booked: true));
+//    Table_Slots_DB.add(Table_Slot(tableid: "Table 15" , booked: true));
+//
+//    //widget._Table_Slots = Table_Slots_DB;
+//    return Table_Slots_DB;
+//  }
 
-   //widget._Table_Slots = Table_Slots_DB;
-   return Table_Slots_DB;
- }
+  Future<List<Tables>> _getTables() async {
 
+    var get_response = await http.get(Utils.RestURL + 'Tables');
+
+    table = List<Tables>();
+    print(get_response.statusCode.toString() );
+    if(get_response.statusCode == 200){
+      var jsondata = json.decode(get_response.body);
+      for(var tbl in jsondata){
+        table.add(Tables.fromJson(tbl));
+      }
+    }
+
+    return table;
+
+  }
+
+  Future _future;
   @override
   void initState() {
       maxColumn = 8;
-
+      _future = _getTables();
       super.initState();
     }
 

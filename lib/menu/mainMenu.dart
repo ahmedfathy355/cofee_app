@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/fab_bottom_app_bar.dart';
 import 'package:gamestop_app/modle/Items.dart';
-import 'package:gamestop_app/utility/ApiFuture.dart';
+import 'package:gamestop_app/utility/utils.dart';
 import 'package:gamestop_app/utility/COLOR_CONST.dart';
 import 'package:gamestop_app/utility/FONT_CONST.dart';
 import 'package:gamestop_app/widgets/loader.dart';
@@ -46,13 +46,14 @@ class _openMenuState extends State<openMenu> {
 
   }
 
-  var RestURL = 'https://localhost/api/';
+
 
   Future<List<Items>> _getItems() async {
 
-    var get_response = await http.get('RestURL' + 'test');
+    var get_response = await http.get(Utils.RestURL + 'test');
+
     items = List<Items>();
-    print(get_response.statusCode);
+    print(get_response.statusCode.toString() + 'XXXXXXXXXXXXXXXX');
     if(get_response.statusCode == 200){
       var jsondata = json.decode(get_response.body);
       for(var itm in jsondata){
@@ -153,13 +154,13 @@ class _openMenuState extends State<openMenu> {
                       itemBuilder: (context , index){
                         return ListTile(
 
-                          title: Text(snapshot.data[index].ItemName , style: TextStyle(fontSize: 22), ),
+                          title: Text(snapshot.data[index].ItemName , style: TextStyle(fontSize: 16), ),
 
                           leading: CircleAvatar(backgroundColor: Colors.purple,foregroundColor: Colors.black,
-                            backgroundImage: AssetImage('assets/images/'+snapshot.data[index].img+''),
-                            child: snapshot.data[index].img!= null ? Text('c',style: TextStyle(color: Colors.white)): Text(''),
+                            backgroundImage: AssetImage('assets/images/'+snapshot.data[index].Barcode+''),
+                            child: snapshot.data[index].Barcode!= null ? Text('c',style: TextStyle(color: Colors.white)): Text(''),
                           ),
-                          subtitle: Text(snapshot.data[index].U_Price + '   LE' ),
+                          subtitle: Text(snapshot.data[index].LowPriceSale.toString() + '   LE' ),
                           trailing: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -207,20 +208,20 @@ class _openMenuState extends State<openMenu> {
                                 },
                                 child: Container(
                                   height: 30.0,
-                                  width: 50.0,
+                                  width: 40.0,
                                   decoration: BoxDecoration(
                                       border: Border(
                                           right: BorderSide(
                                               color: Colors.black12
                                                   .withOpacity(0.5)))),
-                                  child: Center(child: Text("-" ,style: FONT_CONST.OSWALD_REGULAR_RED2_28,)),
+                                  child: Center(child: Text("-" ,style: FONT_CONST.OSWALD_REGULAR_RED2_22,)),
                                 ),
                               ): Container(),
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 25.0),
-                                child: Text(items[index].BranchID.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_28,),
+                                    horizontal: 15.0),
+                                child: Text(items[index].BranchID.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_22,),
                               ),
 
                               /// Increasing value of item
@@ -233,7 +234,7 @@ class _openMenuState extends State<openMenu> {
                                 },
                                 child: Container(
                                   height: 30.0,
-                                  width: 60.0,
+                                  width: 40.0,
                                   decoration: BoxDecoration(
                                       border: Border(
                                           left: BorderSide(
@@ -241,16 +242,9 @@ class _openMenuState extends State<openMenu> {
                                                   .withOpacity(0.4)))),
                                   child: Center(child: Text("+",style: TextStyle(fontFamily: 'Oswald',
                                     fontWeight: FontWeight.w400,
-                                      color: COLOR_CONST.GREEN2,fontSize: 28 ),)),
+                                      color: COLOR_CONST.GREEN2,fontSize: 22 ),)),
                                 ),
                               ),
-
-
-
-
-
-
-
 
 
 

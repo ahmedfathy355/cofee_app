@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:gamestop_app/menu/mainMenu.dart';
+import 'package:gamestop_app/modle/Items.dart';
 
 class Table_Slot {
 
