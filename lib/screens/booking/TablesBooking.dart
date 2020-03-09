@@ -24,7 +24,7 @@ class _TablesBookingState extends State<TablesBooking> {
 //  TablesBooking(
 //      {@required this.table_id, @required this.isbooked});
 
-  HashMap<String, bool> selectedTables = HashMap();
+ HashMap<String, bool> selectedTables = HashMap();
  int maxColumn;
  List<Table_Slot> Table_Slots_DB = [];
 

@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamestop_app/menu/fab_bottom_app_bar.dart';
+import 'package:gamestop_app/modle/Items.dart';
+import 'package:gamestop_app/utility/ApiFuture.dart';
 import 'package:gamestop_app/utility/COLOR_CONST.dart';
 import 'package:gamestop_app/utility/FONT_CONST.dart';
 import 'package:gamestop_app/widgets/loader.dart';
@@ -28,7 +30,7 @@ class _openMenuState extends State<openMenu> {
   List<int> _itemCount = [];
 
   var itm_cat = 1;
-  Future<List<Items>> _getItems() async {
+  Future<List<Items>> _getItems_x() async {
     var sql = "Select * From items_test Where Item_Cat = '$itm_cat' ";
     var get_response = await http.get('http://ubuntu-eg.com/snap_api/select.php?sql=$sql');
     items = List<Items>();
@@ -44,8 +46,26 @@ class _openMenuState extends State<openMenu> {
 
   }
 
+  var RestURL = 'https://localhost/api/';
 
-  Future _insertItems(String table_id , String ItemID , double Qty) async {
+  Future<List<Items>> _getItems() async {
+
+    var get_response = await http.get('RestURL' + 'test');
+    items = List<Items>();
+    print(get_response.statusCode);
+    if(get_response.statusCode == 200){
+      var jsondata = json.decode(get_response.body);
+      for(var itm in jsondata){
+        items.add(Items.fromJson(itm));
+      }
+    }
+    print(items.length.toString());
+    return items;
+
+  }
+
+
+  Future _insertItems_x(String table_id , String ItemID , double Qty) async {
     var sql = "insert Into bill_items_test (tableID,ItemID, Qty) Values ('$table_id' , '$ItemID' , $Qty) ";
     await http.get('http://ubuntu-eg.com/snap_api/insert.php?sql=$sql');
     print('inserted');
@@ -179,7 +199,7 @@ class _openMenuState extends State<openMenu> {
 
 
                               /// Decrease of value item
-                              items[index].qty!=0? InkWell(
+                              items[index].BranchID!=0? InkWell(
                                 onTap: () {
                                   setState(() {
                                     _update(index, -1);
@@ -200,7 +220,7 @@ class _openMenuState extends State<openMenu> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 25.0),
-                                child: Text(items[index].qty.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_28,),
+                                child: Text(items[index].BranchID.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_28,),
                               ),
 
                               /// Increasing value of item
@@ -259,7 +279,7 @@ class _openMenuState extends State<openMenu> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           for(int i = 0 ; i < selecteditems.length ;i++ ){
-            _insertItems(widget.tableID.toString() , selecteditems[i].ItemID , double.tryParse( selecteditems[i].qty.toString()));
+            //_insertItems(widget.tableID.toString() , selecteditems[i].ItemID , double.tryParse( selecteditems[i].qty.toString()));
           }
           Navigator.of(context).pop();
         },
@@ -293,10 +313,10 @@ class _openMenuState extends State<openMenu> {
   _update(int index,int val ) {
     for (int i = 0; i < items.length; i++ ) {
       if (i == index) {
-        items[i] =Items(items[i].ItemID,items[i].ItemName,items[i].U_Price,items[i].img,items[i].qty + val);
+        items[i] =Items(items[i].ItemID,items[i].ItemName,items[i].LowPriceSale,items[i].Barcode,items[i].BranchID + val);
       }
     }
-    selecteditems.add(Items(items[index].ItemID,items[index].ItemName,items[index].U_Price,items[index].img,items[index].qty + val)   );
+    selecteditems.add(Items(items[index].ItemID,items[index].ItemName,items[index].LowPriceSale,items[index].Barcode,items[index].BranchID + val)   );
     listPoduct.add(items);
   }
 
@@ -329,22 +349,3 @@ class _openMenuState extends State<openMenu> {
 }
 
 
-class Items{
-  String ItemID;
-  String ItemName;
-  String U_Price;
-  String img;
-  int qty;
-
-  Items(this.ItemID , this.ItemName , this.U_Price,this.img,this.qty );
-  //Items( this.ItemName );
-
-  Items.fromJson(Map<Object , dynamic> json){
-    ItemID = json['ItemID'].toString();
-    ItemName = json['ItemName'].toString();
-    U_Price = json['U_Price'].toString();
-    img = json["img"].toString();
-    qty = 0;
-  }
-
-}
