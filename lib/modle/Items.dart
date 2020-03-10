@@ -7,8 +7,9 @@ class Items{
   double LowPriceSale;
   String Barcode;
   int BranchID;
+  double qty ;
 
-  Items(this.ItemID , this.ItemName , this.LowPriceSale,this.Barcode,this.BranchID );
+  Items(this.ItemID , this.ItemName , this.LowPriceSale,this.Barcode,this.BranchID , this.qty );
   //Items( this.ItemName );
 
   Items.fromJson(Map<Object , dynamic> json){
@@ -17,6 +18,7 @@ class Items{
     LowPriceSale = json['LowPriceSale'];
     Barcode = json["Barcode"].toString();
     BranchID = json["BranchID"];
+    qty = 0;
   }
 
 }

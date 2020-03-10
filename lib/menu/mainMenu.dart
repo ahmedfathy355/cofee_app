@@ -66,9 +66,9 @@ class _openMenuState extends State<openMenu> {
   }
 
 
-  Future _insertItems_x(String table_id , String ItemID , double Qty) async {
+  Future _insertItems(String table_id , String ItemID , double Qty) async {
     var sql = "insert Into bill_items_test (tableID,ItemID, Qty) Values ('$table_id' , '$ItemID' , $Qty) ";
-    await http.get('http://ubuntu-eg.com/snap_api/insert.php?sql=$sql');
+    await http.get(Utils.RestURL );
     print('inserted');
     selecteditems.clear();
   }
@@ -200,7 +200,7 @@ class _openMenuState extends State<openMenu> {
 
 
                               /// Decrease of value item
-                              items[index].BranchID!=0? InkWell(
+                              items[index].qty!=0? InkWell(
                                 onTap: () {
                                   setState(() {
                                     _update(index, -1);
@@ -221,7 +221,7 @@ class _openMenuState extends State<openMenu> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15.0),
-                                child: Text(items[index].BranchID.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_22,),
+                                child: Text(items[index].qty.toString(),style: FONT_CONST.OSWALD_REGULAR_RED2_22,),
                               ),
 
                               /// Increasing value of item
@@ -307,10 +307,10 @@ class _openMenuState extends State<openMenu> {
   _update(int index,int val ) {
     for (int i = 0; i < items.length; i++ ) {
       if (i == index) {
-        items[i] =Items(items[i].ItemID,items[i].ItemName,items[i].LowPriceSale,items[i].Barcode,items[i].BranchID + val);
+        items[i] =Items(items[i].ItemID,items[i].ItemName,items[i].LowPriceSale,items[i].Barcode,items[i].BranchID,items[i].qty + val);
       }
     }
-    selecteditems.add(Items(items[index].ItemID,items[index].ItemName,items[index].LowPriceSale,items[index].Barcode,items[index].BranchID + val)   );
+    selecteditems.add(Items(items[index].ItemID,items[index].ItemName,items[index].LowPriceSale,items[index].Barcode,items[index].BranchID ,items[index].qty+ val)   );
     listPoduct.add(items);
   }
 

@@ -6,6 +6,7 @@ import 'package:gamestop_app/modle/Tables.dart';
 import 'package:gamestop_app/screens/booking/Order.dart';
 import 'package:gamestop_app/utility/COLOR_CONST.dart';
 import 'package:gamestop_app/utility/utils.dart';
+import 'package:gamestop_app/widgets/loader.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -30,7 +31,7 @@ class _TablesBookingState extends State<TablesBooking> {
  HashMap<String, bool> selectedTables = HashMap();
  int maxColumn;
  //List<Table_Slot> Table_Slots_DB = [];
-List<Tables> table ;
+List<Tables> table = [] ;
 
 //  _getTables_xx(){
 //    Table_Slots_DB = List<Table_Slot>();
@@ -158,8 +159,28 @@ List<Tables> table ;
                     ],
                   ),
 
+
+                  Expanded(
+                    child: FutureBuilder(future: _future,builder: (BuildContext context , AsyncSnapshot snapshot){
+                      if(snapshot.data == null )
+                        {
+                          return Container(
+                            child: Center(
+                              //child: Text('Loading ....'),
+                              child: LoaderTwo(),
+                            ),
+                          );
+                        }
+                      else
+                        {
+                          return _buildSlotGrid();
+                        }
+
+                    },),
+                  ),
+
                   // Tables
-                  _buildSlotGrid(),
+
 
                 ],
               ),
@@ -194,16 +215,16 @@ List<Tables> table ;
      ),
    );
  }
+
  List<Widget> _generatedGrid() {
-   _getTables();
    List<Widget> widgets = [];
 
-   Table_Slots_DB.forEach((Table_Slot) {
+   table.forEach((Table_Slot) {
 
      //ITEM TABLE
      //for (int i = 0; i < Table_Slot.tableid.length ; i++) {
-       var tableId = "${Table_Slot.tableid}";
-       var _isbooked = Table_Slot.booked;
+       var tableId = "${Table_Slot.TableID}";
+       var _isbooked = Table_Slot.IsBooked;
 
        var isSelected =
            selectedTables.containsKey(tableId) && selectedTables[_isbooked];
@@ -220,7 +241,7 @@ List<Tables> table ;
          onTap: () {
            if (!_isbooked) {
 
-             _showModalSheet(Table_Slot.tableid);
+             _showModalSheet(Table_Slot.TableID);
              //Navigator.push(context, MaterialPageRoute( builder: (context) =>  ));
            }
            else{
@@ -242,7 +263,7 @@ List<Tables> table ;
              child: Stack(
                alignment: Alignment(0, 0),
                children: <Widget>[
-                 Text(Table_Slot.tableid.split(" ")[1],style: TextStyle(fontFamily: 'Oswald',color: itemfontColor,fontWeight: FontWeight.bold , fontSize: 25),),
+                 Text(Table_Slot.TableID.toString(),style: TextStyle(fontFamily: 'Oswald',color: itemfontColor,fontWeight: FontWeight.bold , fontSize: 25),),
                  Image.asset('assets/images/chair.png',height: 265,width: 265,color: itemfontColor.withOpacity(0.4) ,)
                ],
              ),
@@ -259,9 +280,6 @@ List<Tables> table ;
 
    return widgets;
  }
- void _handleSelectTable(Table_Slot table_slot ) {
-
- }
 
 
 
@@ -271,7 +289,8 @@ List<Tables> table ;
 
 
 
- void _showModalSheet(String tableID) {
+
+ void _showModalSheet(int tableID) {
    showModalBottomSheet(context: context, builder: (builder) {
      return Container(
        child: openMenu(tableID),
